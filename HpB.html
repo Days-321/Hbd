@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Age-Based Messages</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f5f5dc;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            margin-top: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        button {
+            background-color: #87ceeb;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #4682b4;
+        }
+        .message {
+            font-size: 18px;
+            font-weight: bold;
+            color: #6a5acd;
+            margin-top: 10px;
+        }
+        .emoji {
+            font-size: 20px;
+            margin-left: 5px;
+        }
+        @media (max-width: 768px) {
+            .message {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="step1">
+        <h1>Welcome!</h1>
+        <p>Please enter your name:</p>
+        <input type="text" id="nameInput" placeholder="Your Name">
+        <p>Enter your birth year:</p>
+        <input type="number" id="birthYearInput" placeholder="Year of Birth">
+        <button onclick="goToStep2()">Next</button>
+    </div>
+
+    <div class="container hidden" id="step2">
+        <h1>Hello, <span id="nameDisplay"></span>!</h1>
+        <p>Is today your birthday?</p>
+        <button onclick="showResult(true)">Yes</button>
+        <button onclick="showResult(false)">No</button>
+    </div>
+
+    <div class="container hidden" id="result">
+        <div id="greetings"></div>
+    </div>
+
+    <script>
+        function goToStep2() {
+            const name = document.getElementById("nameInput").value.trim();
+            const birthYear = parseInt(document.getElementById("birthYearInput").value);
+
+            if (name && birthYear && birthYear > 1900 && birthYear <= new Date().getFullYear()) {
+                document.getElementById("nameDisplay").textContent = name;
+                document.getElementById("step1").classList.add("hidden");
+                document.getElementById("step2").classList.remove("hidden");
+            } else {
+                alert("Please enter a valid name and birth year.");
+            }
+        }
+
+        function showResult(isBirthday) {
+            const currentYear = new Date().getFullYear();
+            const birthYear = parseInt(document.getElementById("birthYearInput").value);
+            const age = currentYear - birthYear;
+            const greetingsDiv = document.getElementById("greetings");
+
+            document.getElementById("step2").classList.add("hidden");
+            document.getElementById("result").classList.remove("hidden");
+
+            greetingsDiv.innerHTML = "";
+
+            if (isBirthday) {
+                if (age <= 20) {
+                    displayMessages([
+                        `Kamu sudah ${age} tahun.`,
+                        "Raihlah Impian dan Cita - Citamu.",
+                        "Semangat!",
+                        "Kamu Pasti Bisa!",
+                        "Carilah Pengalaman Sebanyak - banyaknya.",
+                        "Kamu punya jalan ceritamu sendiri.",
+                        "Berpikirlah sebelum mengambil keputusan."
+                    ]);
+                } else if (age >= 21 && age <= 25) {
+                    displayMessages([
+                        "Selamat Ulang Tahun.",
+                        `Sekarang umur ${age} tahun.`,
+                        "Tidak terasa sudah semakin dewasa.",
+                        "Apa yang telah kamu capai pada saat ini?",
+                        "Apakah kamu berhasil meraih Impian atau Cita - Citamu?",
+                        "Atau apakah kamu masih mencoba meraihnya?",
+                        "Kamu sudah kerja ya sekarang.",
+                        "Gimana?",
+                        "Nyaman dengan pekerjaanmu?",
+                        "Sekarang kalau beli sesuatu tidak perlu minta kepada orang tua lagi.",
+                        "Sudah mandiri ya?",
+                        "Sudah ada pasangan?",
+                        "Gimana hubungannya, Aman?",
+                        "Difase ini kamu sudah harus bisa menentukan mana yang prioritas untukmu."
+                    ]);
+                } else if (age >= 26) {
+                    displayMessages([
+                        `Selamat Kamu telah hidup sampai ${age} tahun.`,
+                        "Gimana rasanya jadi dewasa?",
+                        "Berat ya?",
+                        "Ingin jadi Anak - anak lagi?",
+                        "Tetap semangat ya.",
+                        "Aku tahu ini berat tapi jalani saja.",
+                        "Aku yakin kamu pasti bisa."
+                    ]);
+                }
+            } else {
+                if (age <= 25) {
+                    displayMessages([
+                        "Berbahagialah.",
+                        "Bukan karena berulang tahun, tapi karena masih diberi kehidupan hingga saat ini."
+                    ]);
+                } else if (age >= 26) {
+                    displayMessages([
+                        "Masih Hidup kah?",
+                        "Bersyukurlah."
+                    ]);
+                }
+            }
+        }
+
+        function displayMessages(messages) {
+            const greetingsDiv = document.getElementById("greetings");
+            let index = 0;
+
+            const interval = setInterval(() => {
+                if (index < messages.length) {
+                    const messageElement = document.createElement("p");
+                    messageElement.textContent = messages[index];
+                    messageElement.className = "message";
+                    greetingsDiv.appendChild(messageElement);
+                    index++;
+                } else {
+                    clearInterval(interval);
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
